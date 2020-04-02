@@ -4,7 +4,10 @@ const {
   screen,
   globalShortcut,
   clipboard,
-  ipcMain
+  ipcMain,
+  Tray,
+  Menu,
+  shell
 } = require("electron");
 const path = require("path");
 const low = require("lowdb");
@@ -33,7 +36,6 @@ function createWindow() {
   });
 
   mainWindow.loadFile("index.html");
-  mainWindow.webContents.openDevTools();
 
   globalShortcut.register("CmdOrCtrl+Shift+0", () => {
     if (!appShow) {
@@ -48,7 +50,15 @@ function createWindow() {
   ipcMain.on("hide-window", event => {
     if (appShow) {
       mainWindow.hide();
-      appShow = false
+      appShow = false;
+    }
+  });
+
+  mainWindow.on("close", e => {
+    if (appShow) {
+      e.preventDefault();
+      appShow = false;
+      mainWindow.hide();
     }
   });
 
@@ -79,7 +89,57 @@ function createWindow() {
   function updateClipboardList() {
     mainWindow.webContents.send("update-clipboard");
   }
+
+  const template = [
+    {
+      label: "File",
+      submenu: [
+        {
+          label: "About " + app.name,
+          role: "about"
+        },
+        {
+          label: "Open " + app.name,
+          accelerator: "CmdOrCtrl+0",
+          click: () => {
+            if (!appShow) {
+              appShow = true;
+              mainWindow.show();
+            }
+          }
+        },
+        {
+          label: "Quit",
+          click: () => {
+            app.exit();
+          }
+        }
+      ]
+    },
+    {
+      label: "Help",
+      submenu: [
+        {
+          label: "Documentation",
+          click: () => {
+            shell.openExternal("https://www.github.com/ahmetorkmaz3/clipaste");
+          }
+        }
+      ]
+    }
+  ];
+
+  const menu = Menu.buildFromTemplate(template);
+  // Menu.setApplicationMenu(menu);
+
+  tray = new Tray("./images/icons/clipaste.png");
+  tray.setToolTip("Clipaste App.");
+  tray.setContextMenu(menu);
 }
+
+ipcMain.on("app-quit", () => {
+  app.exit();
+});
 
 app.whenReady().then(() => {
   createWindow();

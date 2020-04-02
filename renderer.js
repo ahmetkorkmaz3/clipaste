@@ -1,9 +1,9 @@
 const electron = require("electron");
-const { ipcRenderer } = require("electron");
+const { app, ipcRenderer, clipboard } = require("electron");
 const path = require("path");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
-const Swal = require('sweetalert2');
+const Swal = require("sweetalert2");
 
 const $ = require("jquery");
 
@@ -34,7 +34,6 @@ function createItemTemplate(itemID, text) {
 
 ipcRenderer.on("update-clipboard", async event => {
   let text = await getLastItemDb();
-  console.log(text);
   await writeLastItem(text[0]);
 });
 
@@ -64,6 +63,22 @@ $(".minimize").click(function() {
   ipcRenderer.send("hide-window");
 });
 
+$(".exit").click(function() {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "Application is closing. Are you sure you want to continue?",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#aaa",
+    confirmButtonText: "Yes, Exit!",
+    cancelButtonText: "Cancel"
+  }).then(result => {
+    if (result.value) {
+      ipcRenderer.send("app-quit");
+    }
+  });
+});
+
 $(".delete-all").click(function() {
   Swal.fire({
     title: "Are you sure?",
@@ -91,7 +106,11 @@ $("#items").on("click", ".item button.delete", function() {
   deleteItemClipboard(itemID);
 });
 
-$("#items").on("click", ".item button.clipboard", function() {});
+$("#items").on("click", ".item button.clipboard", function() {
+  itemID = $(this).attr("itemid");
+  let text = $("#items div.item[itemid='" + itemID + "'] div.text").text();
+  clipboard.writeText(text);
+});
 
 function deleteItemClipboard(itemID) {
   const adapter = new FileSync(
