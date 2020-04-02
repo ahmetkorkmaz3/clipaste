@@ -1,21 +1,20 @@
 {
-  "name": "electron-quick-start",
+  "name": "clipaste",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Clipboard manager application",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/ahmetkorkmaz3/clipaste",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "clipboard",
+    "copy",
+    "paste",
+    "keynote"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Ahmet Korkmaz",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^8.2.0"
   },
