@@ -38,7 +38,7 @@ function createWindow() {
 
   mainWindow.loadFile("index.html");
 
-  globalShortcut.register("CmdOrCtrl+Shift+0", () => {
+  globalShortcut.register("CmdOrCtrl+Shift+9", () => {
     if (!appShow) {
       appShow = true;
       mainWindow.show();
