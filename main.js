@@ -122,7 +122,7 @@ function createWindow() {
         {
           label: "Documentation",
           click: () => {
-            shell.openExternal("https://www.github.com/ahmetorkmaz3/clipaste");
+            shell.openExternal("https://github.com/ahmetkorkmaz3/clipaste");
           }
         }
       ]
