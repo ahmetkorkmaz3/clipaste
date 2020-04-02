@@ -4,7 +4,8 @@
   "description": "Clipboard manager application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist:linux": "electron-builder --linux"
   },
   "repository": "https://github.com/ahmetkorkmaz3/clipaste",
   "keywords": [
@@ -13,15 +14,34 @@
     "paste",
     "keynote"
   ],
-  "author": "Ahmet Korkmaz",
+  "author": "Ahmet Korkmaz <muratahmetkorkmaz@hotmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^8.2.0"
+    "electron": "^8.2.0",
+    "electron-builder": "^22.4.1"
   },
   "dependencies": {
     "jquery": "^3.4.1",
     "lowdb": "^1.0.0",
     "shortid": "^2.2.15",
     "sweetalert2": "^9.10.9"
+  },
+  "build": {
+    "appId": "com.arkkod.clipaste",
+    "linux": {
+      "target": [
+        "snap",
+        "deb"
+      ],
+      "files": ["**/*", "build/icon.*"],
+      "icon": "./build/",
+      "category": "Utility"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "./images/logo.png"
+    }
   }
 }

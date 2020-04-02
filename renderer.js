@@ -97,6 +97,7 @@ $(".delete-all").click(function() {
       db.get("clipboard")
         .remove()
         .write();
+      clearDashboard();
     }
   });
 });
@@ -132,4 +133,8 @@ function writeItems(items) {
 
 function writeLastItem(item) {
   $("#items").prepend(createItemTemplate(item.id, item.text));
+}
+
+function clearDashboard() {
+  $("#items").empty();
 }

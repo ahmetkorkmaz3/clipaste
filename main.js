@@ -7,7 +7,8 @@ const {
   ipcMain,
   Tray,
   Menu,
-  shell
+  shell,
+  nativeImage
 } = require("electron");
 const path = require("path");
 const low = require("lowdb");
@@ -130,9 +131,8 @@ function createWindow() {
   ];
 
   const menu = Menu.buildFromTemplate(template);
-  // Menu.setApplicationMenu(menu);
-
-  tray = new Tray("./images/icons/clipaste.png");
+  const iconPath = path.join(__dirname, "build/clipaste.png");
+  tray = new Tray(nativeImage.createFromPath(iconPath));
   tray.setToolTip("Clipaste App.");
   tray.setContextMenu(menu);
 }
