@@ -87,4 +87,12 @@ button:hover {
   background-image: url(./images/icons/trash-2-red.svg);
 }
 
+.icon-delete-all {
+  background-image: url(./images/icons/delete.svg);
+}
+
+.icon-delete-all:hover {
+  background-image: url(./images/icons/delete-white.svg);
+}
+
 /* Icons End */

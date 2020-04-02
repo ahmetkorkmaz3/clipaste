@@ -3,15 +3,21 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!--
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    
+    -->
+    <link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.css" />
+
     <link rel="stylesheet" href="style.css">
 
   </head>
   <body>
 
     <div id="header">
+      <button class="delete-all">
+        <span class="icon icon-delete-all"></span>
+      </button>
       <button class="minimize">
         <span class="icon icon-minimize"></span>
       </button>

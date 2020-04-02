@@ -8,7 +8,7 @@ const {
 } = require("electron");
 const path = require("path");
 const low = require("lowdb");
-const shortid = require('shortid');
+const shortid = require("shortid");
 const FileSync = require("lowdb/adapters/FileSync");
 
 const adapter = new FileSync(path.join(app.getPath("home"), "/.clipaste.json"));
@@ -42,6 +42,13 @@ function createWindow() {
     } else {
       appShow = false;
       mainWindow.hide();
+    }
+  });
+
+  ipcMain.on("hide-window", event => {
+    if (appShow) {
+      mainWindow.hide();
+      appShow = false
     }
   });
 
@@ -79,7 +86,7 @@ app.whenReady().then(() => {
 });
 
 app.on("window-all-closed", function() {
-  if (process.platform !== "darwin") app.quit();
+  if (process.platform !== "darwin") app.exit();
 });
 
 app.on("activate", function() {

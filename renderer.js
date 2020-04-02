@@ -3,22 +3,33 @@ const { ipcRenderer } = require("electron");
 const path = require("path");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
+const Swal = require('sweetalert2');
 
 const $ = require("jquery");
 
 function createItemTemplate(itemID, text) {
-  return `
-  <div class="item">
-    <div class="text" itemID="` + itemID + `">
-    ` + text + `
+  return (
+    `
+  <div class="item" itemID="` +
+    itemID +
+    `">
+    <div class="text">
+    ` +
+    text +
+    `
     </div>
-    <button class="clipboard" itemID="` + itemID + `">
+    <button class="clipboard" itemID="` +
+    itemID +
+    `">
       <span class="icon icon-clipboard"></span>
     </button>
-    <button class="delete" itemID="` + itemID + `">
+    <button class="delete" itemID="` +
+    itemID +
+    `">
       <span class="icon icon-delete"></span>
     </button>
-  </div>`;
+  </div>`
+  );
 }
 
 ipcRenderer.on("update-clipboard", async event => {
@@ -48,6 +59,51 @@ $(function() {
   items.reverse();
   writeItems(items);
 });
+
+$(".minimize").click(function() {
+  ipcRenderer.send("hide-window");
+});
+
+$(".delete-all").click(function() {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#aaa",
+    confirmButtonText: "Delete Clipboard",
+    cancelButtonText: "Cancel"
+  }).then(result => {
+    if (result.value) {
+      const adapter = new FileSync(
+        path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
+      );
+      const db = low(adapter);
+      db.get("clipboard")
+        .remove()
+        .write();
+    }
+  });
+});
+
+$("#items").on("click", ".item button.delete", function() {
+  itemID = $(this).attr("itemid");
+  deleteItemClipboard(itemID);
+});
+
+$("#items").on("click", ".item button.clipboard", function() {});
+
+function deleteItemClipboard(itemID) {
+  const adapter = new FileSync(
+    path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
+  );
+  const db = low(adapter);
+  db.get("clipboard")
+    .remove({ id: itemID })
+    .write();
+
+  $("div[itemid=" + itemID + "]").remove();
+}
 
 function writeItems(items) {
   items.forEach(element => {
