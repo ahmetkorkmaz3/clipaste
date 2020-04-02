@@ -1,5 +1,48 @@
 body {
-  background: #C9D6FF;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #E2E2E2, #C9D6FF);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #E2E2E2, #C9D6FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}  
+  padding: 10px;
+  background: #c9d6ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #e2e2e2,
+    #c9d6ff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #e2e2e2,
+    #c9d6ff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.item {
+  background-color: #fff;
+  box-shadow: -1px 2px 4px rgba(0, 0, 0, 0.25), 1px 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 340px;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.text {
+  flex: 1;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.clipboard img {
+  color: #333;
+  width: 18px;
+  height: 18px;
+}
+
+.delete img {
+  color: red;
+  width: 18px;
+  height: 18px;
+}

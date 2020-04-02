@@ -3,10 +3,12 @@ const {
   BrowserWindow,
   screen,
   globalShortcut,
-  clipboard
+  clipboard,
+  ipcMain
 } = require("electron");
 const path = require("path");
 const low = require("lowdb");
+const shortid = require('shortid');
 const FileSync = require("lowdb/adapters/FileSync");
 
 const adapter = new FileSync(path.join(app.getPath("home"), "/.clipaste.json"));
@@ -17,9 +19,6 @@ db.defaults({ clipboard: [] }).write();
 function createWindow() {
   let appShow = false;
 
-  const copyShortcut = process.platform === "darwin" ? "Option+C" : "Alt+C";
-  const pasteShortcut = process.platform === "darwin" ? "Option+V" : "Alt+V";
-
   const mainWindow = new BrowserWindow({
     frame: false,
     width: 400,
@@ -27,12 +26,14 @@ function createWindow() {
     x: screen.getPrimaryDisplay().workAreaSize.width - 400,
     y: 0,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js")
+      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true
     },
-    show: false
+    show: true
   });
 
   mainWindow.loadFile("index.html");
+  mainWindow.webContents.openDevTools();
 
   globalShortcut.register("CmdOrCtrl+Shift+0", () => {
     if (!appShow) {
@@ -44,12 +45,33 @@ function createWindow() {
     }
   });
 
-  /*
-  globalShortcut.register(copyShortcut, () => {
-    let as = clipboard.read();
-    console.log(as);
-  });
-   */
+  startMonitoringClipboard();
+
+  function startMonitoringClipboard() {
+    mainWindow.webContents.send("app-running");
+    let previousText = clipboard.readText();
+
+    const isDiffText = (str1, str2) => {
+      return str2 && str1 !== str2;
+    };
+
+    setInterval(() => {
+      if (isDiffText(previousText, (previousText = clipboard.readText()))) {
+        writeTextClipboard(clipboard.readText());
+        updateClipboardList();
+      }
+    }, 500);
+  }
+
+  function writeTextClipboard(text) {
+    db.get("clipboard")
+      .push({ id: shortid.generate(), text: text })
+      .write();
+  }
+
+  function updateClipboardList() {
+    mainWindow.webContents.send("update-clipboard");
+  }
 }
 
 app.whenReady().then(() => {
