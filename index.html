@@ -5,29 +5,22 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-
-    <script src="https://unpkg.com/feather-icons"></script>
-
+    
     <link rel="stylesheet" href="style.css">
 
   </head>
   <body>
 
-    <div id="items">
-
-      <div class="item">
-        <div class="text">
-          asdas
-        </div>
-        <button class="clipboard">
-          <img src="./images/icons/clipboard.svg" >
-        </button>
-        <button class="delete">
-          <img src="./images/icons/trash-2.svg" >
-        </button>
-      </div>
-
+    <div id="header">
+      <button class="minimize">
+        <span class="icon icon-minimize"></span>
+      </button>
+      <button class="exit">
+        <span class="icon icon-exit"></span>
+      </button>
     </div>
+
+    <div id="items"></div>
 
     <script src="./renderer.js"></script>
   </body>

@@ -13,13 +13,12 @@ function createItemTemplate(itemID, text) {
     ` + text + `
     </div>
     <button class="clipboard" itemID="` + itemID + `">
-      <img src="./images/icons/clipboard.svg" >
+      <span class="icon icon-clipboard"></span>
     </button>
     <button class="delete" itemID="` + itemID + `">
-      <img src="./images/icons/trash-2.svg" >
+      <span class="icon icon-delete"></span>
     </button>
-  </div>
-  `;
+  </div>`;
 }
 
 ipcRenderer.on("update-clipboard", async event => {

@@ -29,7 +29,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true
     },
-    show: true
+    show: false
   });
 
   mainWindow.loadFile("index.html");
