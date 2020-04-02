@@ -12,9 +12,16 @@
   </a>
 </p>
 
-> Clipboard manager application
+> Clipboard manager application. (Ctrl+Shift+9) Shorcuts is open dashboard.
 
-### 🏠 [Homepage](https://github.com/ahmetkorkmaz3/clipaste)
+## Install with Snapcraft
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/clipaste)
+
+## Screenshots
+
+![Clipaste](images/ss/clipaste-ss2.png)
+![Clipaste Exit](images/ss/clipaste-ss.png)
 
 ## Install
 
