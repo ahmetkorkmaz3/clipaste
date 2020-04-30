@@ -21,7 +21,7 @@
     "electron-builder": "^22.4.1"
   },
   "dependencies": {
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lowdb": "^1.0.0",
     "shortid": "^2.2.15",
     "sweetalert2": "^9.10.9"
