@@ -87,6 +87,7 @@ function createWindow() {
   }
 
   function updateClipboardList() {
+    console.log('update clipboard list is worked');
     mainWindow.webContents.send("update-clipboard");
   }
 

@@ -3,14 +3,11 @@ const { app, ipcRenderer, clipboard } = require("electron");
 const path = require("path");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
-const Swal = require("sweetalert2");
-
-const $ = require("jquery");
 
 function createItemTemplate(itemID, text) {
   return (
     `
-  <div class="item" itemID="` +
+  <div class="item" data-item-id="` +
     itemID +
     `">
     <div class="text">
@@ -18,12 +15,12 @@ function createItemTemplate(itemID, text) {
     text +
     `
     </div>
-    <button class="clipboard" itemID="` +
+    <button class="clipboard" data-item-id="` +
     itemID +
     `">
       <span class="icon icon-clipboard"></span>
     </button>
-    <button class="delete" itemID="` +
+    <button class="delete" data-item-id="` +
     itemID +
     `">
       <span class="icon icon-delete"></span>
@@ -32,8 +29,9 @@ function createItemTemplate(itemID, text) {
   );
 }
 
-ipcRenderer.on("update-clipboard", async event => {
+ipcRenderer.on("update-clipboard", event => {
   let text = await getLastItemDb();
+  console.log(text);
   await writeLastItem(text[0]);
 });
 
@@ -48,7 +46,7 @@ function getLastItemDb() {
     .value());
 }
 
-$(function() {
+(function() {
   const adapter = new FileSync(
     path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
   );
@@ -57,60 +55,47 @@ $(function() {
 
   items.reverse();
   writeItems(items);
-});
+})();
 
-$(".minimize").click(function() {
+const minimizeElement = document.querySelector('.minimize');
+
+minimizeElement.addEventListener('click', () => {
   ipcRenderer.send("hide-window");
 });
 
-$(".exit").click(function() {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "Application is closing. Are you sure you want to continue?",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#aaa",
-    confirmButtonText: "Yes, Exit!",
-    cancelButtonText: "Cancel"
-  }).then(result => {
-    if (result.value) {
-      ipcRenderer.send("app-quit");
-    }
+const exitButton = document.querySelector('.exit');
+
+exitButton.addEventListener('click', () => {
+  alert('güle güle');
+  ipcRenderer.send('app-quit');
+});
+
+const deleteAllButton = document.querySelector('.delete-all');
+deleteAllButton.addEventListener('click', () => {
+  const adapter = new FileSync(
+    path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
+  );
+  const db = low(adapter);
+  db.get("clipboard")
+    .remove()
+    .write();
+  clearDashboard();
+});
+
+const itemDeleteButtons = document.querySelectorAll('#items .item button.delete');
+itemDeleteButtons.forEach(element => {
+  element.addEventListener('click', () => {
+    const itemId = element.getAttribute('data-item-id');
+    deleteItemClipboard(itemId);
   });
 });
 
-$(".delete-all").click(function() {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#aaa",
-    confirmButtonText: "Delete Clipboard",
-    cancelButtonText: "Cancel"
-  }).then(result => {
-    if (result.value) {
-      const adapter = new FileSync(
-        path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
-      );
-      const db = low(adapter);
-      db.get("clipboard")
-        .remove()
-        .write();
-      clearDashboard();
-    }
+const itemCopyToClipboardButtons = document.querySelectorAll('#items .item button.clipboard');
+itemCopyToClipboardButtons.forEach(element => {
+  element.addEventListener('click', () => {
+    const text = element.text;
+    clipboard.writeText(text);
   });
-});
-
-$("#items").on("click", ".item button.delete", function() {
-  itemID = $(this).attr("itemid");
-  deleteItemClipboard(itemID);
-});
-
-$("#items").on("click", ".item button.clipboard", function() {
-  itemID = $(this).attr("itemid");
-  let text = $("#items div.item[itemid='" + itemID + "'] div.text").text();
-  clipboard.writeText(text);
 });
 
 function deleteItemClipboard(itemID) {
@@ -122,19 +107,19 @@ function deleteItemClipboard(itemID) {
     .remove({ id: itemID })
     .write();
 
-  $("div[itemid=" + itemID + "]").remove();
+  document.querySelector(`div[data-item-id="${itemID}"]`)?.remove();
 }
 
 function writeItems(items) {
   items.forEach(element => {
-    $("#items").append(createItemTemplate(element.id, element.text));
+    document.querySelector('#items').append(createItemTemplate(element.id, element.text));
   });
 }
 
 function writeLastItem(item) {
-  $("#items").prepend(createItemTemplate(item.id, item.text));
+  document.querySelector('#items').prepend(createItemTemplate(element.id, element.text));
 }
 
 function clearDashboard() {
-  $("#items").empty();
+  document.querySelector('#items')?.remove();
 }

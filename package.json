@@ -17,8 +17,8 @@
   "author": "Ahmet Korkmaz <muratahmetkorkmaz@hotmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^8.2.0",
-    "electron-builder": "^22.4.1"
+    "electron": "^19.0.9",
+    "electron-builder": "^5.5.0"
   },
   "dependencies": {
     "jquery": "^3.4.1",
@@ -33,7 +33,10 @@
         "snap",
         "deb"
       ],
-      "files": ["**/*", "build/icon.*"],
+      "files": [
+        "**/*",
+        "build/icon.*"
+      ],
       "icon": "./build/",
       "category": "Utility"
     },
