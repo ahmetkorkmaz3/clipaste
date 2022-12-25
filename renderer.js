@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { app, ipcRenderer, clipboard } = require("electron");
+const { ipcRenderer, clipboard } = require("electron");
 const path = require("path");
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
@@ -29,9 +29,11 @@ function createItemTemplate(itemID, text) {
   );
 }
 
-ipcRenderer.on("update-clipboard", event => {
+ipcRenderer.on("update-clipboard", async () => {
   let text = await getLastItemDb();
-  console.log(text);
+
+  console.log('text', text);
+
   await writeLastItem(text[0]);
 });
 
@@ -40,10 +42,10 @@ function getLastItemDb() {
     path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
   );
   const db = low(adapter);
-  return (text = db
-    .get("clipboard")
-    .takeRight(1)
-    .value());
+  return db
+      .get("clipboard")
+      .last()
+      .value();
 }
 
 (function() {
@@ -66,7 +68,6 @@ minimizeElement.addEventListener('click', () => {
 const exitButton = document.querySelector('.exit');
 
 exitButton.addEventListener('click', () => {
-  alert('güle güle');
   ipcRenderer.send('app-quit');
 });
 
@@ -117,7 +118,7 @@ function writeItems(items) {
 }
 
 function writeLastItem(item) {
-  document.querySelector('#items').prepend(createItemTemplate(element.id, element.text));
+  document.querySelector('#items').prepend(createItemTemplate(item.id, item.text));
 }
 
 function clearDashboard() {

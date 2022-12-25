@@ -87,7 +87,6 @@ function createWindow() {
   }
 
   function updateClipboardList() {
-    console.log('update clipboard list is worked');
     mainWindow.webContents.send("update-clipboard");
   }
 
@@ -139,7 +138,9 @@ function createWindow() {
 }
 
 ipcMain.on("app-quit", () => {
-  app.exit();
+  if (process.platform !== 'darwin') {
+    app.exit();
+  }
 });
 
 app.whenReady().then(() => {
@@ -147,7 +148,9 @@ app.whenReady().then(() => {
 });
 
 app.on("window-all-closed", function() {
-  if (process.platform !== "darwin") app.exit();
+  if (process.platform !== "darwin") {
+    app.exit();
+  }
 });
 
 app.on("activate", function() {

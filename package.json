@@ -17,8 +17,8 @@
   "author": "Ahmet Korkmaz <muratahmetkorkmaz@hotmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^19.0.9",
-    "electron-builder": "^5.5.0"
+    "electron": "^22.0.0",
+    "electron-builder": "^22.10.3"
   },
   "dependencies": {
     "jquery": "^3.4.1",
