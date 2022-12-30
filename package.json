@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Clipboard manager application",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "start": "electron .",
     "dist:linux": "electron-builder --linux"
@@ -17,14 +18,14 @@
   "author": "Ahmet Korkmaz <muratahmetkorkmaz@hotmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^8.2.0",
-    "electron-builder": "^22.4.1"
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0"
   },
   "dependencies": {
-    "jquery": "^3.4.1",
-    "lowdb": "^1.0.0",
-    "shortid": "^2.2.15",
-    "sweetalert2": "^9.10.9"
+    "jquery": "^3.6.3",
+    "lowdb": "^5.0.5",
+    "shortid": "^2.2.16",
+    "sweetalert2": "^11.6.16"
   },
   "build": {
     "appId": "com.arkkod.clipaste",

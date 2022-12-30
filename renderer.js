@@ -1,11 +1,12 @@
 const electron = require("electron");
-const { app, ipcRenderer, clipboard } = require("electron");
+const { ipcRenderer, clipboard, app} = require("electron");
 const path = require("path");
-const low = require("lowdb");
-const FileSync = require("lowdb/adapters/FileSync");
-const Swal = require("sweetalert2");
+import Swal from 'sweetalert2'
 
 const $ = require("jquery");
+const { dirname, join } = require("node:path");
+const { JSONFile } = require("lowdb/node");
+const { Low } = require("lowdb");
 
 function createItemTemplate(itemID, text) {
   return (
@@ -38,22 +39,28 @@ ipcRenderer.on("update-clipboard", async event => {
 });
 
 function getLastItemDb() {
-  const adapter = new FileSync(
-    path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
-  );
-  const db = low(adapter);
-  return (text = db
-    .get("clipboard")
-    .takeRight(1)
-    .value());
+  const __dirname = dirname(path.join(app.getPath("home"), "/.clipaste.json"));
+  const file = join(__dirname, 'db.json')
+
+  const adapter = new JSONFile(file)
+  const db = new Low(adapter)
+
+  return db.data.clipboard[-1].value;
+
+  // return (text = db
+  //   .get("clipboard")
+  //   .takeRight(1)
+  //   .value());
 }
 
 $(function() {
-  const adapter = new FileSync(
-    path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
-  );
-  const db = low(adapter);
-  const items = db.get("clipboard").value();
+  const __dirname = dirname(path.join(app.getPath("home"), "/.clipaste.json"));
+  const file = join(__dirname, 'db.json')
+
+  const adapter = new JSONFile(file)
+  const db = new Low(adapter)
+
+  const items = db.data.clipboard;
 
   items.reverse();
   writeItems(items);
@@ -89,41 +96,41 @@ $(".delete-all").click(function() {
     confirmButtonText: "Delete Clipboard",
     cancelButtonText: "Cancel"
   }).then(result => {
-    if (result.value) {
-      const adapter = new FileSync(
-        path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
-      );
-      const db = low(adapter);
-      db.get("clipboard")
-        .remove()
-        .write();
-      clearDashboard();
-    }
+    // if (result.value) {
+    //   const adapter = new FileSync(
+    //     path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
+    //   );
+    //   const db = low(adapter);
+    //   db.get("clipboard")
+    //     .remove()
+    //     .write();
+    //   clearDashboard();
+    // }
   });
 });
 
 $("#items").on("click", ".item button.delete", function() {
-  itemID = $(this).attr("itemid");
-  deleteItemClipboard(itemID);
+  const itemID = $(this).attr("itemid");
+  // deleteItemClipboard(itemID);
 });
 
 $("#items").on("click", ".item button.clipboard", function() {
-  itemID = $(this).attr("itemid");
+  const itemID = $(this).attr("itemid");
   let text = $("#items div.item[itemid='" + itemID + "'] div.text").text();
   clipboard.writeText(text);
 });
 
-function deleteItemClipboard(itemID) {
-  const adapter = new FileSync(
-    path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
-  );
-  const db = low(adapter);
-  db.get("clipboard")
-    .remove({ id: itemID })
-    .write();
-
-  $("div[itemid=" + itemID + "]").remove();
-}
+// function deleteItemClipboard(itemID) {
+//   const adapter = new FileSync(
+//     path.join(electron.remote.app.getPath("home"), "/.clipaste.json")
+//   );
+//   const db = low(adapter);
+//   db.get("clipboard")
+//     .remove({ id: itemID })
+//     .write();
+//
+//   $("div[itemid=" + itemID + "]").remove();
+// }
 
 function writeItems(items) {
   items.forEach(element => {

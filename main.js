@@ -1,4 +1,4 @@
-const {
+import {
   app,
   BrowserWindow,
   screen,
@@ -8,16 +8,24 @@ const {
   Tray,
   Menu,
   shell
-} = require("electron");
+} from 'electron';
+
+const nodePath = require("node:path");
 const path = require("path");
-const low = require("lowdb");
 const shortid = require("shortid");
-const FileSync = require("lowdb/adapters/FileSync");
 
-const adapter = new FileSync(path.join(app.getPath("home"), "/.clipaste.json"));
-const db = low(adapter);
+import { Low } from 'lowdb'
+import { JSONFile } from 'lowdb/node'
 
-db.defaults({ clipboard: [] }).write();
+// File path
+const __dirname = nodePath.dirname(path.join(app.getPath("home"), "/.clipaste.json"));
+const file = nodePath.join(__dirname, 'db.json')
+
+// Configure lowdb to write to JSONFile
+const adapter = new JSONFile(file)
+const db = new Low(adapter)
+
+db.data ||= { clipboard: [] }
 
 function createWindow() {
   let appShow = false;
@@ -80,10 +88,11 @@ function createWindow() {
     }, 500);
   }
 
-  function writeTextClipboard(text) {
-    db.get("clipboard")
+  async function writeTextClipboard(text) {
+    db.data.clipboard
       .push({ id: shortid.generate(), text: text })
-      .write();
+
+    await db.write();
   }
 
   function updateClipboardList() {
