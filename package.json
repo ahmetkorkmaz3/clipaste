@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Clipboard manager application",
   "main": "main.js",
-  "type": "module",
   "scripts": {
     "start": "electron .",
     "dist:linux": "electron-builder --linux"
@@ -23,7 +22,7 @@
   },
   "dependencies": {
     "jquery": "^3.6.3",
-    "lowdb": "^5.0.5",
+    "lowdb": "^1.0.0",
     "shortid": "^2.2.16",
     "sweetalert2": "^11.6.16"
   },

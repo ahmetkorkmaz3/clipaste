@@ -1,4 +1,4 @@
-import {
+const {
   app,
   BrowserWindow,
   screen,
@@ -8,24 +8,18 @@ import {
   Tray,
   Menu,
   shell
-} from 'electron';
-
-const nodePath = require("node:path");
+} = require("electron");
 const path = require("path");
+const low = require("lowdb");
 const shortid = require("shortid");
+const FileSync = require("lowdb/adapters/FileSync");
 
-import { Low } from 'lowdb'
-import { JSONFile } from 'lowdb/node'
+console.log(app.getPath("home"))
 
-// File path
-const __dirname = nodePath.dirname(path.join(app.getPath("home"), "/.clipaste.json"));
-const file = nodePath.join(__dirname, 'db.json')
+const adapter = new FileSync(path.join(app.getPath("home"), "/.clipaste.json"));
+const db = low(adapter);
 
-// Configure lowdb to write to JSONFile
-const adapter = new JSONFile(file)
-const db = new Low(adapter)
-
-db.data ||= { clipboard: [] }
+db.defaults({ clipboard: [] }).write();
 
 function createWindow() {
   let appShow = false;
@@ -38,7 +32,8 @@ function createWindow() {
     y: 0,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
     },
     show: false
   });
@@ -88,11 +83,10 @@ function createWindow() {
     }, 500);
   }
 
-  async function writeTextClipboard(text) {
-    db.data.clipboard
+  function writeTextClipboard(text) {
+    db.get("clipboard")
       .push({ id: shortid.generate(), text: text })
-
-    await db.write();
+      .write();
   }
 
   function updateClipboardList() {
@@ -141,7 +135,7 @@ function createWindow() {
   ];
 
   const menu = Menu.buildFromTemplate(template);
-  tray = new Tray(path.join(__dirname, "/images/favicon.png"));
+  const tray = new Tray(path.join(__dirname, "/images/favicon.png"));
   tray.setToolTip("Clipaste App.");
   tray.setContextMenu(menu);
 }
