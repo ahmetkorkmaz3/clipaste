@@ -5,6 +5,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-04
+
 ### Added
 
 - Homebrew cask for macOS: `brew install --cask ahmetkorkmaz3/tap/clipaste`.
@@ -50,5 +52,6 @@ Clipaste 2.0 is a full rewrite on Electron 44. Your 1.x history is imported auto
 
 First release on the Snap Store.
 
+[2.1.0]: https://github.com/ahmetkorkmaz3/clipaste/releases/tag/v2.1.0
 [2.0.0]: https://github.com/ahmetkorkmaz3/clipaste/releases/tag/v2.0.0
 [1.0.0]: https://snapcraft.io/clipaste

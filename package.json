@@ -1,7 +1,7 @@
 {
   "name": "clipaste",
   "productName": "Clipaste",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A simple clipboard manager. It keeps your clipboard history and shows the app each item came from.",
   "type": "module",
   "main": "src/main/main.js",
