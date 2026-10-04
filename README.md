@@ -60,7 +60,9 @@ brew install --cask ahmetkorkmaz3/tap/clipaste
 
 You can also download the `.dmg` file from the [latest release](https://github.com/ahmetkorkmaz3/clipaste/releases/latest). It runs on Apple silicon and Intel, on macOS 13 or later.
 
-The app is not signed. If macOS blocks the first start, open **System Settings > Privacy & Security** and select **Open Anyway**.
+The Homebrew install removes the download quarantine flag, so macOS starts the app without a warning.
+
+The `.dmg` app is not signed. If macOS blocks the first start, open **System Settings > Privacy & Security** and select **Open Anyway**.
 
 ### Windows
 

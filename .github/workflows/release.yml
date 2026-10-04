@@ -3,6 +3,7 @@ name: Release
 # A tag such as v2.0.0 builds all packages, creates the GitHub release and
 # publishes the snap to the stable channel of the Snap Store.
 # Pull requests that change the build only build the packages (no publish).
+# A manual run with a tag only updates the Homebrew tap for that release.
 on:
   push:
     tags: ["v*"]
@@ -12,6 +13,10 @@ on:
       - package-lock.json
       - .github/workflows/release.yml
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (for example v2.1.0). Updates only the Homebrew tap."
+        required: false
 
 permissions:
   contents: read
@@ -19,6 +24,7 @@ permissions:
 jobs:
   build:
     name: Build (${{ matrix.name }})
+    if: inputs.tag == ''
     strategy:
       fail-fast: false
       matrix:
@@ -155,14 +161,31 @@ jobs:
   homebrew-tap:
     name: Homebrew tap
     needs: github-release
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: >-
+      !cancelled() &&
+      ((startsWith(github.ref, 'refs/tags/v') && needs.github-release.result == 'success') ||
+      inputs.tag != '')
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
+        if: inputs.tag == ''
         with:
           name: clipaste-mac
           path: dist
+      - name: Download the .dmg file from the existing release
+        if: inputs.tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag $TAG is not a version tag such as v2.1.0"
+            exit 1
+          fi
+          gh release download "$TAG" --dir dist \
+            --pattern "clipaste-${TAG#v}-mac-universal.dmg"
       - name: Check the token
         env:
           HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
@@ -178,7 +201,7 @@ jobs:
           path: tap
       - name: Update the cask and push it to the tap
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           sha256=$(sha256sum "dist/clipaste-$version-mac-universal.dmg" | cut -d' ' -f1)
           mkdir -p tap/Casks
           sed -e "s/^  version \".*\"/  version \"$version\"/" \

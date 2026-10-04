@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Fixed
+
+- The Homebrew cask removes the quarantine flag, so macOS no longer blocks the first start.
+
 ## [2.1.0] - 2026-10-04
 
 ### Added

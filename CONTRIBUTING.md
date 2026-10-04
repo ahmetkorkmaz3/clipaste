@@ -80,3 +80,9 @@ The workflow copies `homebrew/clipaste.rb` to the [ahmetkorkmaz3/homebrew-tap](h
 3. Save the token as a secret: `gh secret set HOMEBREW_TAP_TOKEN`.
 
 The token expires on the date you give. Make a new token before that date.
+
+To push a changed cask for an existing release, run the workflow on `master` with the release tag. This run only updates the tap. It uses the `.dmg` file from the GitHub release:
+
+```sh
+gh workflow run release.yml --ref master -f tag=v2.1.0
+```
