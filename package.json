@@ -33,7 +33,8 @@
     "dist": "electron-builder --publish never",
     "dist:linux": "electron-builder --linux --publish never",
     "dist:mac": "electron-builder --mac --publish never",
-    "dist:win": "electron-builder --win --publish never"
+    "dist:win": "electron-builder --win --publish never",
+    "dist:snap": "snapcraft pack --use-lxd --output dist/"
   },
   "dependencies": {
     "lowdb": "^7.0.1",
@@ -62,7 +63,6 @@
     },
     "linux": {
       "target": [
-        "snap",
         "deb",
         "AppImage"
       ],
@@ -104,16 +104,6 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    },
-    "snapcraft": {
-      "base": "core24",
-      "core24": {
-        "useLXD": true,
-        "grade": "stable",
-        "confinement": "strict",
-        "summary": "Clipboard manager that shows where each item came from",
-        "autoStart": true
-      }
     }
   }
 }

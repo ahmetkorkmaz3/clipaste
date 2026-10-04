@@ -16,6 +16,8 @@ npm start
 npm test
 ```
 
+To build the snap on Linux, install snapcraft and LXD, then run `npm run dist:linux` and `npm run dist:snap`.
+
 ## Project layout
 
 | Path                     | Content                                                        |
@@ -28,6 +30,7 @@ npm test
 | `src/preload.cjs`        | The small API that the window can use                          |
 | `src/renderer/`          | The window (HTML, CSS, JavaScript)                             |
 | `test/`                  | Tests for `node --test`                                        |
+| `snap/snapcraft.yaml`    | The snap package. It uses the files in `dist/linux-unpacked`   |
 | `website/`               | The website on GitHub Pages                                    |
 
 The window runs in a sandbox without Node.js access. Always show clipboard content with `textContent`, never with `innerHTML`.

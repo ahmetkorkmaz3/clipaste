@@ -69,6 +69,28 @@ jobs:
           # The macOS and Windows packages are not signed.
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
+      - name: Build the snap
+        if: matrix.name == 'linux'
+        run: npm run dist:snap
+
+      - name: Smoke test the snap
+        if: matrix.name == 'linux'
+        run: |
+          sudo apt-get update -q && sudo apt-get install -yq xvfb xclip
+          sudo snap install --dangerous dist/*.snap
+          xvfb-run -a bash -c '
+            clipaste --hidden > clipaste.log 2>&1 &
+            pid=$!
+            sleep 15
+            printf "snap smoke test" | xclip -selection clipboard
+            sleep 5
+            cat clipaste.log
+            kill -0 $pid || { echo "::error::Clipaste stopped"; exit 1; }
+            grep -q "snap smoke test" ~/snap/clipaste/current/.config/Clipaste/history.json \
+              || { echo "::error::The copied text is not in the history"; exit 1; }
+            echo "Clipaste runs and records the clipboard."
+          '
+
       - uses: actions/upload-artifact@v7
         with:
           name: clipaste-${{ matrix.name }}

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Clipaste
+GenericName=Clipboard Manager
+Comment=Keep your clipboard history and see the app each item came from
+Exec=clipaste %U
+Icon=${SNAP}/meta/gui/clipaste.png
+Categories=Utility;
+Keywords=clipboard;copy;paste;history;
+StartupWMClass=Clipaste
+Terminal=false
