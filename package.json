@@ -112,7 +112,6 @@
         "grade": "stable",
         "confinement": "strict",
         "summary": "Clipboard manager that shows where each item came from",
-        "forceX11": true,
         "autoStart": true
       }
     }

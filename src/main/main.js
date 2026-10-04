@@ -18,12 +18,18 @@ const LIMITS = [50, 100, 200, 500, 1000];
 const CONCEALED_FORMATS = ["x-kde-passwordManagerHint", "org.nspasteboard.ConcealedType", "ExcludeClipboardContentFromMonitorProcessing"];
 
 // On Wayland, a window without focus cannot read the clipboard and global
-// shortcuts do not work. XWayland keeps both features available.
-if (process.platform === "linux") {
-  app.commandLine.appendSwitch("ozone-platform", "x11");
-}
+// shortcuts do not work. XWayland keeps both features available. The switch
+// must be on the command line before Chromium starts, so Clipaste starts again with it.
+const needsX11Relaunch =
+  process.platform === "linux" &&
+  process.env.WAYLAND_DISPLAY &&
+  process.env.DISPLAY &&
+  !app.commandLine.hasSwitch("ozone-platform");
 
-if (!app.requestSingleInstanceLock()) {
+if (needsX11Relaunch) {
+  app.relaunch({ args: [...process.argv.slice(1), "--ozone-platform=x11"] });
+  app.exit(0);
+} else if (!app.requestSingleInstanceLock()) {
   // A second start with --toggle (for example from a desktop keyboard shortcut)
   // goes to the running instance through the "second-instance" event.
   app.quit();
