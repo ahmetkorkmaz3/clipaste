@@ -44,7 +44,7 @@ The window runs in a sandbox without Node.js access. Always show clipboard conte
 
 ## Release a new version
 
-The `Release` workflow builds the packages, creates the GitHub release and publishes the snap.
+The `Release` workflow builds the packages, creates the GitHub release, publishes the snap and updates the Homebrew cask.
 
 1. Update `version` in `package.json` and run `npm install` to update the lock file.
 2. Move the `Unreleased` notes in `CHANGELOG.md` to a new version section, for example `## [2.1.0] - 2026-11-01`.
@@ -70,3 +70,13 @@ The workflow needs the `SNAPCRAFT_STORE_CREDENTIALS` repository secret to publis
 4. Delete `credentials.txt`.
 
 The credentials expire on the date you give. Make new credentials before that date.
+
+### Homebrew tap token
+
+The workflow copies `homebrew/clipaste.rb` to the [ahmetkorkmaz3/homebrew-tap](https://github.com/ahmetkorkmaz3/homebrew-tap) repository. It sets the new version and the SHA-256 of the `.dmg` file. The workflow needs the `HOMEBREW_TAP_TOKEN` repository secret to push to the tap. To create it:
+
+1. Create a [fine-grained personal access token](https://github.com/settings/personal-access-tokens/new) with access to `ahmetkorkmaz3/homebrew-tap` only.
+2. Give it the **Contents: Read and write** permission.
+3. Save the token as a secret: `gh secret set HOMEBREW_TAP_TOKEN`.
+
+The token expires on the date you give. Make a new token before that date.

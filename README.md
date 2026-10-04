@@ -52,9 +52,15 @@ You can also download the `.AppImage` or `.deb` file from the [latest release](h
 
 ### macOS
 
-Download the `.dmg` file from the [latest release](https://github.com/ahmetkorkmaz3/clipaste/releases/latest). It runs on Apple silicon and Intel.
+Install with [Homebrew](https://brew.sh):
 
-The app is not signed. On the first start, right-click Clipaste in the Applications folder and select **Open**.
+```sh
+brew install --cask ahmetkorkmaz3/tap/clipaste
+```
+
+You can also download the `.dmg` file from the [latest release](https://github.com/ahmetkorkmaz3/clipaste/releases/latest). It runs on Apple silicon and Intel, on macOS 13 or later.
+
+The app is not signed. If macOS blocks the first start, open **System Settings > Privacy & Security** and select **Open Anyway**.
 
 ### Windows
 

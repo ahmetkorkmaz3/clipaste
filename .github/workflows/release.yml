@@ -151,3 +151,47 @@ jobs:
             exit 1
           fi
           snapcraft upload --release=stable dist/*.snap
+
+  homebrew-tap:
+    name: Homebrew tap
+    needs: github-release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: clipaste-mac
+          path: dist
+      - name: Check the token
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          if [ -z "$HOMEBREW_TAP_TOKEN" ]; then
+            echo "::error::The HOMEBREW_TAP_TOKEN secret is not set. See CONTRIBUTING.md."
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+        with:
+          repository: ahmetkorkmaz3/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: tap
+      - name: Update the cask and push it to the tap
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          sha256=$(sha256sum "dist/clipaste-$version-mac-universal.dmg" | cut -d' ' -f1)
+          mkdir -p tap/Casks
+          sed -e "s/^  version \".*\"/  version \"$version\"/" \
+              -e "s/^  sha256 \".*\"/  sha256 \"$sha256\"/" \
+              homebrew/clipaste.rb > tap/Casks/clipaste.rb
+          cat tap/Casks/clipaste.rb
+          cd tap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Casks/clipaste.rb
+          if git diff --cached --quiet; then
+            echo "The cask is already up to date."
+            exit 0
+          fi
+          git commit -m "clipaste $version"
+          git push
