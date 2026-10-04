@@ -1,4 +1,10 @@
-node_modules
+node_modules/
 dist/
-.idea
+.idea/
 .DS_Store
+.playwright-mcp/
+*.log
+parts/
+stage/
+prime/
+*.snap

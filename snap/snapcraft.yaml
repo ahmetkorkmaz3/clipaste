@@ -1,0 +1,62 @@
+name: clipaste
+title: Clipaste
+summary: Clipboard manager that shows where each item came from
+description: |
+  Clipaste keeps the history of the text you copy. Press Ctrl+Shift+9,
+  find the item and press Enter to copy it again.
+
+  - Each item shows the app you copied it from, and the time.
+  - Search the history, and pin the items you use often.
+  - Keyboard navigation, light and dark theme, tray menu.
+  - The history stays on your computer.
+
+  On Wayland, add a custom keyboard shortcut with the command
+  "clipaste --toggle".
+website: https://ahmetkorkmaz3.github.io/clipaste/
+source-code: https://github.com/ahmetkorkmaz3/clipaste
+issues: https://github.com/ahmetkorkmaz3/clipaste/issues
+license: MIT
+icon: snap/gui/clipaste.png
+adopt-info: clipaste
+base: core24
+grade: stable
+confinement: strict
+
+platforms:
+  amd64:
+
+apps:
+  clipaste:
+    # The Chromium sandbox needs "allow-sandbox", which needs a manual store
+    # review. The snap confinement isolates the app instead.
+    command: app/clipaste --no-sandbox
+    extensions: [gnome]
+    autostart: clipaste.desktop
+    plugs:
+      - browser-support
+      - home
+      - network
+      - opengl
+      - unity7
+      - x11
+      - wayland
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+
+parts:
+  # The app files come from "npm run dist:linux" (dist/linux-unpacked).
+  clipaste:
+    plugin: dump
+    source: dist/linux-unpacked
+    organize:
+      "*": app/
+    stage-packages:
+      - libnspr4
+      - libnss3
+      - libxss1
+      - libsecret-1-0
+    prime:
+      - -app/chrome-sandbox
+    override-pull: |
+      craftctl default
+      craftctl set version="$(grep -m1 '"version"' "$CRAFT_PROJECT_DIR/package.json" | cut -d '"' -f4)"

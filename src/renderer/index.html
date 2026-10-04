@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:"
+    />
+    <title>Clipaste</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <img class="logo" src="../../assets/logo.png" alt="" />
+      <div class="title">
+        <strong>Clipaste</strong>
+        <span id="count" class="muted"></span>
+      </div>
+      <div class="window-actions">
+        <button id="clear" class="icon-button danger" title="Clear history (pinned items stay)" aria-label="Clear history">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6" /></svg>
+        </button>
+        <button id="hide" class="icon-button" title="Hide (Esc)" aria-label="Hide window">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14" /></svg>
+        </button>
+        <button id="quit" class="icon-button danger" title="Quit Clipaste" aria-label="Quit">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <input id="search" type="search" placeholder="Search history" autocomplete="off" spellcheck="false" />
+      </label>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="tab" data-filter="pinned" role="tab" aria-selected="false">Pinned</button>
+      </div>
+    </div>
+
+    <main id="items" role="listbox" aria-label="Clipboard history"></main>
+
+    <div id="empty" class="empty" hidden>
+      <svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2" /><path d="M9 4V3h6v1" /></svg>
+      <p id="empty-title">Nothing copied yet</p>
+      <p id="empty-text" class="muted">Copy some text in any app. It shows up here.</p>
+    </div>
+
+    <footer class="hints muted">
+      <span><kbd id="shortcut"></kbd> open</span>
+      <span><kbd>↑</kbd><kbd>↓</kbd> select</span>
+      <span><kbd>Enter</kbd> copy</span>
+      <span><kbd>Esc</kbd> hide</span>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <dialog id="confirm">
+      <form method="dialog">
+        <h2 id="confirm-title"></h2>
+        <p id="confirm-text" class="muted"></p>
+        <menu>
+          <button value="cancel" class="button">Cancel</button>
+          <button value="ok" id="confirm-ok" class="button danger"></button>
+        </menu>
+      </form>
+    </dialog>
+
+    <template id="item-template">
+      <article class="item" role="option" tabindex="-1">
+        <div class="text"></div>
+        <div class="meta">
+          <span class="source"></span>
+          <time class="time muted"></time>
+          <span class="actions">
+            <button class="icon-button small open" title="Open link" aria-label="Open link">
+              <svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+            </button>
+            <button class="icon-button small pin" title="Pin" aria-label="Pin">
+              <svg viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 6 4 4v2H6v-2l4-4z" /></svg>
+            </button>
+            <button class="icon-button small danger delete" title="Delete" aria-label="Delete">
+              <svg viewBox="0 0 24 24"><path d="M3 6h18M19 6l-1 14H6L5 6M8 6V4h8v2" /></svg>
+            </button>
+          </span>
+        </div>
+      </article>
+    </template>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

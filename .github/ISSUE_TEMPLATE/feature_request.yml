@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest an idea for Clipaste.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to do?
+      description: Tell the problem that the feature solves.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: How should Clipaste help?

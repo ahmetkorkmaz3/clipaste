@@ -1,47 +1,109 @@
 {
   "name": "clipaste",
-  "version": "1.0.0",
-  "description": "Clipboard manager application",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "dist:linux": "electron-builder --linux"
+  "productName": "Clipaste",
+  "version": "2.0.0",
+  "description": "A simple clipboard manager. It keeps your clipboard history and shows the app each item came from.",
+  "type": "module",
+  "main": "src/main/main.js",
+  "homepage": "https://ahmetkorkmaz3.github.io/clipaste/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmetkorkmaz3/clipaste.git"
   },
-  "repository": "https://github.com/ahmetkorkmaz3/clipaste",
+  "bugs": {
+    "url": "https://github.com/ahmetkorkmaz3/clipaste/issues"
+  },
   "keywords": [
     "clipboard",
+    "clipboard-manager",
+    "clipboard-history",
     "copy",
     "paste",
-    "keynote"
+    "electron",
+    "snap"
   ],
   "author": "Ahmet Korkmaz <muratahmetkorkmaz@hotmail.com>",
   "license": "MIT",
-  "devDependencies": {
-    "electron": "^8.2.0",
-    "electron-builder": "^22.4.1"
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"test/*.test.js\"",
+    "dist": "electron-builder --publish never",
+    "dist:linux": "electron-builder --linux --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:snap": "snapcraft pack --use-lxd --output dist/"
   },
   "dependencies": {
-    "jquery": "^3.4.1",
-    "lowdb": "^1.0.0",
-    "shortid": "^2.2.15",
-    "sweetalert2": "^9.10.9"
+    "lowdb": "^7.0.1",
+    "x11": "^4.3.0"
+  },
+  "devDependencies": {
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3"
+  },
+  "allowScripts": {
+    "electron": true,
+    "electron-winstaller": false
   },
   "build": {
     "appId": "com.arkkod.clipaste",
+    "productName": "Clipaste",
+    "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "linux": {
       "target": [
-        "snap",
-        "deb"
+        "deb",
+        "AppImage"
       ],
-      "files": ["**/*", "build/icon.*"],
-      "icon": "./build/",
-      "category": "Utility"
+      "executableName": "clipaste",
+      "category": "Utility",
+      "synopsis": "Clipboard manager",
+      "maintainer": "Ahmet Korkmaz <muratahmetkorkmaz@hotmail.com>",
+      "desktop": {
+        "entry": {
+          "StartupWMClass": "Clipaste",
+          "Keywords": "clipboard;copy;paste;history;"
+        }
+      }
     },
     "mac": {
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
       ],
-      "icon": "./images/logo.png"
+      "category": "public.app-category.utilities",
+      "extendInfo": {
+        "LSUIElement": true
+      }
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }
