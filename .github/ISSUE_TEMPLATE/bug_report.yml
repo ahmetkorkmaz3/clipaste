@@ -1,0 +1,43 @@
+name: Bug report
+description: Something does not work as expected.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens?
+      description: Tell what you see and what you expected to see.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Clipaste
+        2. Copy a text in ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Clipaste version
+      description: Open the tray menu. The version is in the "About Clipaste" item.
+      placeholder: "2.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installed from
+      options: [Snap Store, AppImage, .deb, macOS .dmg, Windows installer, Source code]
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Operating system
+      placeholder: "Ubuntu 24.04 (Wayland), macOS 15, Windows 11 ..."
+    validations:
+      required: true
