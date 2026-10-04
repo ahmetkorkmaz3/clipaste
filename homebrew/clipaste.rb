@@ -19,6 +19,14 @@ cask "clipaste" do
 
   app "Clipaste.app"
 
+  # Clipaste has only an ad hoc signature, so Gatekeeper blocks the first
+  # start while the download quarantine flag is set. Remove the flag.
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:           ["-dr", "com.apple.quarantine", "{{appdir}}/Clipaste.app"],
+        writable_paths: ["{{appdir}}/Clipaste.app"]
+  end
+
   uninstall quit: "com.arkkod.clipaste"
 
   zap trash: [
@@ -28,9 +36,4 @@ cask "clipaste" do
     "~/Library/Preferences/com.arkkod.clipaste.plist",
     "~/Library/Saved Application State/com.arkkod.clipaste.savedState",
   ]
-
-  caveats <<~EOS
-    Clipaste is not signed. If macOS blocks the first start, open
-    System Settings > Privacy & Security and select "Open Anyway".
-  EOS
 end
