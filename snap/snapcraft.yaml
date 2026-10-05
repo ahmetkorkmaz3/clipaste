@@ -1,17 +1,36 @@
 name: clipaste
 title: Clipaste
-summary: Clipboard manager that shows where each item came from
+summary: Clipboard history that shows the app each item came from
 description: |
   Clipaste keeps the history of the text you copy. Press Ctrl+Shift+9,
   find the item and press Enter to copy it again.
 
-  - Each item shows the app you copied it from, and the time.
-  - Search the history, and pin the items you use often.
-  - Keyboard navigation, light and dark theme, tray menu.
-  - The history stays on your computer.
+  **Features**
 
-  On Wayland, add a custom keyboard shortcut with the command
-  "clipaste --toggle".
+  - **Source app**: each item shows the app you copied it from, and the time.
+  - **Search**: start to type. The list filters by text and by app name.
+  - **Pin**: pinned items are never trimmed and stay when you clear the history.
+  - **Keyboard first**: arrow keys to select, Enter to copy, Delete to delete, Esc to hide.
+  - **Links**: open a copied link in your browser with one click.
+  - **Light and dark theme**: Clipaste follows your system theme.
+  - **Tray menu**: recent items, Pause Recording, Hide After Copy, Start at Login and History Size.
+  - **Private**: the history stays on your computer. Clipaste does not record
+    secrets that password managers mark as concealed.
+
+  **Wayland**
+
+  Wayland does not let apps register global shortcuts. Open Settings >
+  Keyboard > Custom Shortcuts and add a shortcut with the command
+  `clipaste --toggle`.
+
+  The source app shows for X11 apps. Native Wayland apps do not share this
+  information.
+
+  **Upgrade from 1.x**
+
+  Clipaste 2 is a full rewrite. It imports your 1.x history on the first start.
+
+  Clipaste is free and open source (MIT). Report bugs and ideas on GitHub.
 website: https://ahmetkorkmaz3.github.io/clipaste/
 source-code: https://github.com/ahmetkorkmaz3/clipaste
 issues: https://github.com/ahmetkorkmaz3/clipaste/issues
