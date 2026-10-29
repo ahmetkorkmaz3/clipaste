@@ -41,8 +41,8 @@
     "x11": "^4.3.0"
   },
   "devDependencies": {
-    "electron": "^44.5.1",
-    "electron-builder": "^26.15.3"
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
   },
   "allowScripts": {
     "electron": true,
